@@ -1,7 +1,33 @@
 use clap;
 
-use ndnf::library;
+fn make_cli() -> clap::Command<'static> {
+    clap::command!()
+        .propagate_version(true)
+        .arg(clap::arg!(-j --json "Use JSON input and output").required(false))
+        .subcommand_required(true)
+        .subcommand(make_cli_install())
+        .subcommand(make_cli_remove())
+}
+
+fn make_cli_install() -> clap::Command<'static> {
+    clap::command!("install")
+        .about("Install a package or packages on your system")
+        .arg(clap::arg!(-q --quiet "Quiet operation (less output)").required(false))
+        .arg(clap::arg!(-v --verbose "Verbose operation (more output)").required(false))
+        .arg(clap::arg!(-y --assumeyes "Automatically answer yes for all questions").required(false))
+        .arg(clap::arg!(-n --assumeno "Automatically answer no for all questions").required(false))
+        .arg(clap::arg!(--nodocs "Do not install package documentation").required(false))
+        .arg(clap::arg!(-r --refresh "Set metadata as expired before running the command").required(false))
+        .arg(clap::arg!(<package> "Package(s) to install").multiple(true))
+}
+
+fn make_cli_remove() -> clap::Command<'static> {
+    clap::command!("remove")
+        .about("Remove a package or packages from your system")
+}
 
 fn main() {
+    let matches = make_cli().get_matches();
+
     println!("Hello, world!");
 }
