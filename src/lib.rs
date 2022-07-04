@@ -1,6 +1,8 @@
 pub mod ndnf {
     pub mod rpm {
         pub mod nevra {
+            use std::cmp::Ordering;
+
             #[derive(Debug)]
             enum ParseError {}
 
@@ -48,7 +50,43 @@ pub mod ndnf {
 
             impl PartialEq for NEVRA {
                 fn eq(&self, other: &Self) -> bool {
-                    return self.to_string().unwrap() == other.to_string().unwrap();
+                    &self.to_string().unwrap() == &other.to_string().unwrap()
+                }
+            }
+
+            impl PartialOrd for NEVRA {
+                fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+                    let default_epoch = "0".to_string();
+
+                    if &self == &other {
+                        return Some(Ordering::Equal);
+                    }
+
+                    if &self.name != &other.name {
+                        return None;
+                    }
+
+                    if &self.epoch.as_ref().unwrap_or(&default_epoch)
+                        < &other.epoch.as_ref().unwrap_or(&default_epoch)
+                    {
+                        return Some(Ordering::Less);
+                    }
+
+                    if &self.epoch.as_ref().unwrap_or(&default_epoch)
+                        > &other.epoch.as_ref().unwrap_or(&default_epoch)
+                    {
+                        return Some(Ordering::Greater);
+                    }
+
+                    if &self.release < &other.release {
+                        return Some(Ordering::Less);
+                    }
+
+                    if &self.release > &other.release {
+                        return Some(Ordering::Greater);
+                    }
+
+                    None
                 }
             }
 
@@ -210,6 +248,84 @@ pub mod ndnf {
                         }
                     );
                 }
+
+                #[test]
+                fn NEVRA_compare_gt_epoch() {
+                    assert!(
+                        NEVRA {
+                            name: "name".to_string(),
+                            epoch: Some("1".to_string()),
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
+                        } > NEVRA {
+                            name: "name".to_string(),
+                            epoch: None,
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
+                        }
+                    );
+                }
+
+                #[test]
+                fn NEVRA_compare_gt_release() {
+                    assert!(
+                        NEVRA {
+                            name: "name".to_string(),
+                            epoch: None,
+                            version: "version".to_string(),
+                            release: "2".to_string(),
+                            architecture: "architecture".to_string(),
+                        } > NEVRA {
+                            name: "name".to_string(),
+                            epoch: None,
+                            version: "version".to_string(),
+                            release: "1".to_string(),
+                            architecture: "architecture".to_string(),
+                        }
+                    );
+                }
+
+
+                #[test]
+                fn NEVRA_compare_lt_epoch() {
+                    assert!(
+                        NEVRA {
+                            name: "name".to_string(),
+                            epoch: None,
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
+                        } < NEVRA {
+                            name: "name".to_string(),
+                            epoch: Some("1".to_string()),
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
+                        }
+                    );
+                }
+
+                #[test]
+                fn NEVRA_compare_lt_release() {
+                    assert!(
+                        NEVRA {
+                            name: "name".to_string(),
+                            epoch: None,
+                            version: "version".to_string(),
+                            release: "1".to_string(),
+                            architecture: "architecture".to_string(),
+                        } < NEVRA {
+                            name: "name".to_string(),
+                            epoch: None,
+                            version: "version".to_string(),
+                            release: "2".to_string(),
+                            architecture: "architecture".to_string(),
+                        }
+                    );
+                }
+
             }
         }
     }
