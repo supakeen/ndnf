@@ -6,7 +6,6 @@ authors = ["Simon de Vlieger <cmdr@supakeen.com>"]
 
 [dependencies]
 clap = { version = "3.1", features = ["cargo"] }
-dbus = { version = "0.9" }
 
 [lib]
 name = "ndnf"
