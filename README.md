@@ -21,6 +21,8 @@ to `dnf`.
 
 ### ndnf-daemon
 
+`ndnf-daemon` provides `PackageKit` and `dnfdaemon` D-Bus APIs.
+
 ## Ecosystem
 
 The packaging ecosystem is wide and diverse. How all the bits fit together
