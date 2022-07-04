@@ -12,7 +12,14 @@ and [dnf](https://github.com/rpm-software-management/dnf) and provides the
 
 ### ndnf
 
-### ndnfd
+`ndnf` is a command line frontend.
+
+### ndnf-compat
+
+`ndnf-compat` is a command line compatible `ndnf` frontend that can be aliased
+to `dnf`.
+
+### ndnf-daemon
 
 ## Ecosystem
 
