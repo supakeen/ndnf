@@ -21,9 +21,15 @@ fn make_cli_install() -> clap::Command<'static> {
         .arg(clap::arg!(-q --quiet "Quiet operation (less output)").required(false))
         .arg(clap::arg!(-v --verbose "Verbose operation (more output)").required(false))
         .arg(
-            clap::arg!(-y --assumeyes "Automatically answer yes for all questions").required(false),
+            clap::arg!(-y --assumeyes "Automatically answer yes for all questions")
+                .required(false)
+                .conflicts_with("assumeno"),
         )
-        .arg(clap::arg!(-n --assumeno "Automatically answer no for all questions").required(false))
+        .arg(
+            clap::arg!(-n --assumeno "Automatically answer no for all questions")
+                .required(false)
+                .conflicts_with("assumeyes"),
+        )
         .arg(clap::arg!(--nodocs "Do not install package documentation").required(false))
         .arg(
             clap::arg!(-r --refresh "Set metadata as expired before running the command")
