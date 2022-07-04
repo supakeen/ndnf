@@ -70,66 +70,47 @@ pub mod ndnf {
                 fn NEVRA_to_string() {
                     assert_eq!(
                         NEVRA {
-                            name: "foo".to_string(),
-                            epoch: Some("foo".to_string()),
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
+                            name: "name".to_string(),
+                            epoch: None,
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
                         }
                         .to_string()
                         .unwrap(),
-                        "foo-foo:foo-foo.foo".to_string()
+                        "name-0:version-release.architecture".to_string()
                     );
 
                     assert_eq!(
                         NEVRA {
-                            name: "foo".to_string(),
-                            epoch: None,
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
+                            name: "name".to_string(),
+                            epoch: Some("1".to_string()),
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
                         }
                         .to_string()
                         .unwrap(),
-                        "foo-0:foo-foo.foo".to_string()
-                    )
+                        "name-1:version-release.architecture".to_string()
+                    );
                 }
 
                 #[test]
                 fn NEVRA_compare_eq() {
                     assert_eq!(
                         NEVRA {
-                            name: "foo".to_string(),
+                            name: "name".to_string(),
                             epoch: None,
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
                         },
                         NEVRA {
-                            name: "foo".to_string(),
+                            name: "name".to_string(),
                             epoch: None,
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
-                        }
-                    );
-                }
-
-                #[test]
-                fn NEVRA_compare_neq_name() {
-                    assert!(
-                        NEVRA {
-                            name: "foo".to_string(),
-                            epoch: None,
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
-                        } != NEVRA {
-                            name: "bar".to_string(),
-                            epoch: None,
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
                         }
                     );
                 }
@@ -138,18 +119,37 @@ pub mod ndnf {
                 fn NEVRA_compare_eq_default_epoch() {
                     assert_eq!(
                         NEVRA {
-                            name: "foo".to_string(),
+                            name: "name".to_string(),
                             epoch: Some("0".to_string()),
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
                         },
                         NEVRA {
-                            name: "foo".to_string(),
+                            name: "name".to_string(),
                             epoch: None,
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
+                        }
+                    );
+                }
+
+                #[test]
+                fn NEVRA_compare_neq_name() {
+                    assert!(
+                        NEVRA {
+                            name: "name".to_string(),
+                            epoch: None,
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
+                        } != NEVRA {
+                            name: "other-name".to_string(),
+                            epoch: None,
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
                         }
                     );
                 }
@@ -158,17 +158,17 @@ pub mod ndnf {
                 fn NEVRA_compare_neq_version() {
                     assert!(
                         NEVRA {
-                            name: "foo".to_string(),
+                            name: "name".to_string(),
                             epoch: None,
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
                         } != NEVRA {
-                            name: "foo".to_string(),
+                            name: "name".to_string(),
                             epoch: None,
-                            version: "bar".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
+                            version: "other-version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
                         }
                     );
                 }
@@ -177,17 +177,17 @@ pub mod ndnf {
                 fn NEVRA_compare_neq_release() {
                     assert!(
                         NEVRA {
-                            name: "foo".to_string(),
+                            name: "name".to_string(),
                             epoch: None,
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
                         } != NEVRA {
-                            name: "foo".to_string(),
+                            name: "name".to_string(),
                             epoch: None,
-                            version: "foo".to_string(),
-                            release: "bar".to_string(),
-                            architecture: "foo".to_string(),
+                            version: "version".to_string(),
+                            release: "other-release".to_string(),
+                            architecture: "architecture".to_string(),
                         }
                     );
                 }
@@ -196,17 +196,17 @@ pub mod ndnf {
                 fn NEVRA_compare_neq_architecture() {
                     assert!(
                         NEVRA {
-                            name: "foo".to_string(),
+                            name: "name".to_string(),
                             epoch: None,
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "foo".to_string(),
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "architecture".to_string(),
                         } != NEVRA {
-                            name: "foo".to_string(),
+                            name: "name".to_string(),
                             epoch: None,
-                            version: "foo".to_string(),
-                            release: "foo".to_string(),
-                            architecture: "bar".to_string(),
+                            version: "version".to_string(),
+                            release: "release".to_string(),
+                            architecture: "other-architecture".to_string(),
                         }
                     );
                 }
